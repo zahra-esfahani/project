@@ -1,25 +1,35 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./SignInPage.module.css";
-import { getUserToken } from "../configs/auth";
-import { setcookie } from "../configs/cookie";
+import {  setcookie } from "../configs/cookie";
+import { useLogIn } from "../services/mutaions";
 
 function LogInPage({ setStep }) {
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
+  const navigate = useNavigate();
+  const { mutate } = useLogIn();
+
   const changeHandler = (e) => {
     const name = e.target.name;
     const value = e.target.value;
     setUser((i) => ({ ...i, [name]: value }));
   };
 
-  const clickHandler=async()=>{
-    const userCheck={username:user.username , password:user.password}
-    const {response , error}= await getUserToken(userCheck)
-    console.log(response.data , error);
-    setcookie(response.data);
-  }
+  const clickHandler = async () => {
+    mutate(user, {
+      onSuccess: (data) => {
+        console.log(data);
+        setcookie(data.data.token);
+        navigate("/admin-page")
+      },
+      onError: (error) => {
+        console.log(error.message);
+      },
+    });
+  };
 
   console.log(user);
   return (
@@ -54,7 +64,7 @@ function LogInPage({ setStep }) {
         onChange={changeHandler}
       />
       <button onClick={clickHandler}>ورود</button>
-      <p onClick={() => setStep(1)}>ایجاد حساب کاربری!</p>
+      <p onClick={() => navigate("/sign-in")}>ایجاد حساب کاربری!</p>
     </div>
   );
 }

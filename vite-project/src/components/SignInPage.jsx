@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./SignInPage.module.css";
-import api from "../configs/api";
-import { sendUser } from "../configs/auth";
+import { useNavigate } from "react-router-dom";
+import { useSignIn } from "../services/mutaions";
 
 function SignInPage({ setStep }) {
   const [userSign, setUserSign] = useState({
@@ -9,6 +9,8 @@ function SignInPage({ setStep }) {
     password: "",
     rePassword: "",
   });
+  const navigate = useNavigate();
+  const { mutate } = useSignIn();
 
   const changeHandler = (e) => {
     const name = e.target.name;
@@ -16,25 +18,24 @@ function SignInPage({ setStep }) {
     setUserSign((i) => ({ ...i, [name]: value }));
   };
 
-  const clickHandler = async () => {
-    if (userSign.password !== userSign.rePassword) {
-      console.log("no");
-    } else {
-      console.log("ok");
+  const clickHandler = () => {
+    const { username, password, rePassword } = userSign;
 
-      const userCheck = {
-        username: userSign.username,
-        password: userSign.password,
-      };
-      const { response, error } = await sendUser(
-        userCheck
-      );
-      console.log(response, error);
-    }
+    if (!username || !password)
+      return alert("User Name and Password is Necessary");
+    if (password !== rePassword) return alert("Passwords Isn't The Same!");
 
-    setUserSign({ username: "", password: "", rePassword: "" });
+    mutate(
+      { username, password },
+      {
+        onSuccess: (data) => {
+          console.log(data);
+          navigate("/login");
+        },
+        onError: (error) => console.log(error.message),
+      }
+    );
   };
-  console.log(userSign);
   return (
     <>
       <div className={styles.parent}>
@@ -75,7 +76,7 @@ function SignInPage({ setStep }) {
           onChange={changeHandler}
         />
         <button onClick={clickHandler}>ثبت نام</button>
-        <p onClick={() => setStep(2)}>حساب کاربری دارید؟</p>
+        <p onClick={() => navigate("/login")}>حساب کاربری دارید؟</p>
       </div>
     </>
   );

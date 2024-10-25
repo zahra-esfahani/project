@@ -1,7 +1,13 @@
 const setcookie=(token)=>{
-    document.cookie = `Token=${token.token}; max-age=${
+    document.cookie = `Token=${token}; max-age=${
         1 * 24 * 60 * 60
       }`;
 };
 
-export {setcookie};
+const getCookie=()=>{
+  const cookie=document.cookie;
+  return cookie
+  .split("=")[1]
+}
+
+export {setcookie , getCookie};
