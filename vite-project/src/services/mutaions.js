@@ -12,8 +12,20 @@ const useLogIn=()=>{
 
 }
 
-const useNewProduct=()=>{
-  const mutationFn = (data) => api.post("products", data);
-  return useMutation({ mutationFn });
+// const useNewProduct=()=>{
+//   const mutationFn = (data) => api.post("products", data);
+//   return useMutation({ mutationFn });
+// }
+
+const useEditAndCreateProduct=(id , edit)=>{
+  if(edit){
+    const mutationFn = (data) => api.put(`products/${id}`, data);
+    return useMutation({ mutationFn });
+  }
+  else{
+    const mutationFn = (data) => api.post("products", data);
+    return useMutation({ mutationFn });
+  }
+ 
 }
-export{useSignIn , useLogIn , useNewProduct}
+export{useSignIn , useLogIn  , useEditAndCreateProduct}

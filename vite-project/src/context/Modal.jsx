@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Modal.module.css";
 import { useModal } from "./ModalProvider";
-import { useNewProduct } from "../services/mutaions";
+import { useEditAndCreateProduct } from "../services/mutaions";
 import { useQueryClient } from "@tanstack/react-query";
 import { useProducts } from "../services/queries";
+import EditAndCreateModal from "../components/EditAndCreateModal";
 
 function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
   useEffect(() => {
@@ -12,6 +13,7 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
         name: editProduct.name,
         price: editProduct.price,
         quantity: editProduct.quantity,
+        id: editProduct.id,
       });
     } else {
       setNewProduct({ name: "", price: null, quantity: null });
@@ -19,7 +21,6 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
   }, [edit]);
 
   const { setIsOpend } = useModal();
-  const { mutate } = useNewProduct();
   const { queryKey } = useProducts();
   const queryClient = useQueryClient();
 
@@ -28,6 +29,7 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
     price: null,
     quantity: null,
   });
+  const { mutate } = useEditAndCreateProduct(NewProduct.id, edit);
 
   const changeHandler = (e) => {
     const name = e.target.name;
@@ -42,6 +44,8 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
         queryClient.invalidateQueries({
           queryKey,
         });
+        setNewProduct({ name: "", price: null, quantity: null });
+        setEdit(false);
       },
       onError: (error) => console.log(error.message),
     });
@@ -50,52 +54,14 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
   return (
     <>
       {isOpend && (
-        <div className={styles.parent}>
-          <div className={styles.modal}>
-            <h4>{title}</h4>
-            <div className={styles.design}>
-              <label htmlFor="name">نام کالا</label>
-              <input
-                type="text"
-                name="name"
-                placeholder="نام کالا"
-                value={NewProduct.name}
-                onChange={changeHandler}
-              />
-            </div>
-            <div className={styles.design}>
-              <label htmlFor="quantity">تعداد موجودی </label>
-              <input
-                type="text"
-                name="quantity"
-                placeholder=" تعداد"
-                value={NewProduct.quantity}
-                onChange={changeHandler}
-              />
-            </div>
-            <div className={styles.design}>
-              <label htmlFor="price">قیمت</label>
-              <input
-                type="text"
-                name="price"
-                placeholder="قیمت "
-                value={NewProduct.price}
-                onChange={changeHandler}
-              />
-            </div>
-
-            <div className={styles.buttons}>
-              <button onClick={clickHandler}>{action}</button>
-              <button
-                onClick={() => {
-                  setIsOpend(false), setEdit(false);
-                }}
-              >
-                انصراف
-              </button>
-            </div>
-          </div>
-        </div>
+        <EditAndCreateModal
+          changeHandler={changeHandler}
+          clickHandler={clickHandler}
+          NewProduct={NewProduct}
+          setEdit={setEdit}
+          title={title}
+          action={action}
+        />
       )}
     </>
   );
