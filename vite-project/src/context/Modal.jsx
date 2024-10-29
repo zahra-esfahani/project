@@ -49,6 +49,7 @@ function Modal({
   };
 
   const clickHandler = () => {
+    if(!NewProduct.name || !NewProduct.price || !NewProduct.quantity) return;
     mutate(NewProduct, {
       onSuccess: (data) => {
         console.log(data);

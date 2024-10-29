@@ -48,7 +48,7 @@ function EditAndCreateModal({
         </div>
 
         <div className={styles.buttons}>
-          <button onClick={clickHandler}>{action}</button>
+          <button onClick={clickHandler} style={{backgroundColor:"#55a3f0"}}>{action}</button>
           <button
             onClick={() => {
               setIsOpend(false), setEdit(false);

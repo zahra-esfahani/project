@@ -4,11 +4,12 @@ import styles from "./SignInPage.module.css";
 import {  setcookie } from "../configs/cookie";
 import { useLogIn } from "../services/mutaions";
 
-function LogInPage({ setStep }) {
+function LogInPage() {
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
+
   const navigate = useNavigate();
   const { mutate } = useLogIn();
 
@@ -18,7 +19,8 @@ function LogInPage({ setStep }) {
     setUser((i) => ({ ...i, [name]: value }));
   };
 
-  const clickHandler = async () => {
+  const clickHandler =  () => {
+    if(!user.username || !user.password)return;
     mutate(user, {
       onSuccess: (data) => {
         console.log(data);
@@ -31,7 +33,6 @@ function LogInPage({ setStep }) {
     });
   };
 
-  console.log(user);
   return (
     <div className={styles.parent}>
       <svg

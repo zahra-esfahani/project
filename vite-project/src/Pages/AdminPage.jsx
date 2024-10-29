@@ -116,7 +116,7 @@ function AdminPage() {
       <div>
         <ProductsList page={page } search={search} />
       </div>
-      <Pagination SetPage={SetPage} />
+      <Pagination SetPage={SetPage} page={page}/>
     </>
   );
 }

@@ -31,7 +31,6 @@ table tbody {
   display: block;
   background-color: #fff;
   border-radius: 0px 0px 10px 10px;
-  height: 547px;
 }
 table tbody tr {
   display: block;
@@ -41,4 +40,42 @@ table tbody tr {
 }
 table tbody td{
     display: block;
+}
+
+@media (max-width: 1000px) {
+  .titels{
+    width: 100%;
+  }
+  .productTitle{
+    margin-right: 50px;
+
+  }
+  .productDetail{
+    margin-right: 50px;
+  }
+}
+@media (max-width: 700px){
+
+  .productTitle{
+    margin-right:20px;
+
+  }
+  .productDetail{
+    margin-right: 30px;
+    font-size: 15px;
+  }
+}
+@media (max-width: 550px){
+  .productDetail{
+    font-size: 10px;
+  }
+}
+@media (max-width: 488px){
+  .productTitle{
+    margin-right:10px;
+
+  }
+  .productDetail{
+    margin-right: 20px;
+  }
 }

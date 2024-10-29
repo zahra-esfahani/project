@@ -5,9 +5,8 @@ import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useModal } from "../context/ModalProvider";
 
-function ProductsList({page , search}) {
-  const { data, isPending, isLoading } = useProducts(page , search);
-  console.log(data?.data, isLoading, isPending);
+function ProductsList({ page, search }) {
+  const { data} = useProducts(page, search)
   const {
     setAction,
     setTitle,
@@ -15,7 +14,7 @@ function ProductsList({page , search}) {
     setDelete,
     setEditProduct,
     setEdit,
-    setDeleteProduct
+    setDeleteProduct,
   } = useModal();
 
   const clickHandler = (product) => {
@@ -27,7 +26,7 @@ function ProductsList({page , search}) {
   };
   const clickDeleteHandler = (product) => {
     setDelete(true);
-    setDeleteProduct(product)
+    setDeleteProduct(product);
     setTitle("آیا از حذف این محصول مطمئن هستید؟");
   };
   return (
@@ -42,11 +41,11 @@ function ProductsList({page , search}) {
           </tr>
         </thead>
         <tbody>
-          {isLoading ? (
+          {!data?.data ? (
             <tr>
               {" "}
-              <td>
-                <h4>isLoading...</h4>
+              <td style={{ textAlign: "center" }}>
+                <h4>محصولی وجود ندارد</h4>
               </td>
             </tr>
           ) : (
@@ -59,8 +58,12 @@ function ProductsList({page , search}) {
                   <td className={styles.productDetail}>{product.id}</td>
                   <td className={styles.productDetail}>
                     {" "}
-                    <FiEdit onClick={() => clickHandler(product)} />{" "}
+                    <FiEdit
+                      style={{ color: "green" }}
+                      onClick={() => clickHandler(product)}
+                    />{" "}
                     <RiDeleteBin6Line
+                      style={{ color: "red" }}
                       onClick={() => clickDeleteHandler(product)}
                     />
                   </td>
