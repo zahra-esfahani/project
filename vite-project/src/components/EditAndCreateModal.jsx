@@ -8,7 +8,7 @@ function EditAndCreateModal({
   NewProduct,
   setEdit,
   title,
-  action,
+  action
 }) {
   const { setIsOpend } = useModal();
 

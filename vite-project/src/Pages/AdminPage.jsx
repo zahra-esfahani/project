@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./AdminPage.module.css";
 import { CiSearch } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
 import ProductsList from "../components/ProductsList";
 import { useModal } from "../context/ModalProvider";
+import Pagination from "../components/Pagination";
 
 function AdminPage() {
-  const {setAction , setTitle , setIsOpend}=useModal();
-
-  const clickHandler=()=>{
-    setTitle("ایجاد محصول جدید")
-    setAction("ایجاد")
-    setIsOpend(true)
-  }
+  const { setAction, setTitle, setIsOpend } = useModal();
+  const [page, SetPage] = useState(1);
+  const [search, setSerach] = useState("");
+  const clickHandler = () => {
+    setTitle("ایجاد محصول جدید");
+    setAction("ایجاد");
+    setIsOpend(true);
+    console.log("oh");
+  };
   return (
     <>
       <div className={styles.parent}>
@@ -20,7 +23,12 @@ function AdminPage() {
           <CiSearch className={styles.search} />
         </div>
         <div className={styles.inputParent}>
-          <input type="text" placeholder="جستجو کالا" />
+          <input
+            type="text"
+            value={search}
+            placeholder="جستجو کالا"
+            onChange={(e) => setSerach(e.target.value)}
+          />
         </div>
         <div className={styles.searchLeft}>
           <div className={styles.userParent}>
@@ -106,8 +114,9 @@ function AdminPage() {
         </div>
       </div>
       <div>
-        <ProductsList />
+        <ProductsList page={page } search={search} />
       </div>
+      <Pagination SetPage={SetPage} />
     </>
   );
 }

@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
-import styles from "./Modal.module.css";
 import { useModal } from "./ModalProvider";
 import { useEditAndCreateProduct } from "../services/mutaions";
 import { useQueryClient } from "@tanstack/react-query";
 import { useProducts } from "../services/queries";
 import EditAndCreateModal from "../components/EditAndCreateModal";
+import DeleteModal from "../components/DeleteModal";
 
-function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
+function Modal({
+  isOpend,
+  title,
+  action,
+  editProduct,
+  deleteProduct,
+  Delete,
+  edit,
+  setEdit,
+}) {
   useEffect(() => {
     if (edit) {
       setNewProduct({
@@ -20,6 +29,7 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
     }
   }, [edit]);
 
+
   const { setIsOpend } = useModal();
   const { queryKey } = useProducts();
   const queryClient = useQueryClient();
@@ -29,9 +39,10 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
     price: null,
     quantity: null,
   });
-  const { mutate } = useEditAndCreateProduct(NewProduct.id, edit);
+  const { mutate } = useEditAndCreateProduct(NewProduct.id, edit, Delete);
 
   const changeHandler = (e) => {
+    console.log(Delete);
     const name = e.target.name;
     const value = e.target.value;
     setNewProduct((i) => ({ ...i, [name]: value }));
@@ -53,6 +64,7 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
   };
   return (
     <>
+      {Delete && <DeleteModal id={deleteProduct.id}/>}
       {isOpend && (
         <EditAndCreateModal
           changeHandler={changeHandler}
@@ -61,6 +73,7 @@ function Modal({ isOpend, title, action, editProduct, edit, setEdit }) {
           setEdit={setEdit}
           title={title}
           action={action}
+          Delete={Delete}
         />
       )}
     </>

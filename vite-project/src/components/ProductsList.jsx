@@ -3,20 +3,32 @@ import styles from "./productsList.module.css";
 import { useProducts } from "../services/queries";
 import { FiEdit } from "react-icons/fi";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Modal from "../context/Modal";
 import { useModal } from "../context/ModalProvider";
 
-function ProductsList() {
-  const { data, isPending, isLoading } = useProducts();
-  console.log(data?.data.data, isLoading, isPending);
-  const {setAction , setTitle , setIsOpend , setEditProduct , setEdit}=useModal();
+function ProductsList({page , search}) {
+  const { data, isPending, isLoading } = useProducts(page , search);
+  console.log(data?.data, isLoading, isPending);
+  const {
+    setAction,
+    setTitle,
+    setIsOpend,
+    setDelete,
+    setEditProduct,
+    setEdit,
+    setDeleteProduct
+  } = useModal();
 
   const clickHandler = (product) => {
-    setEdit(true)
-    setEditProduct(product)
-    setTitle("ویرایش محصول")
-    setAction("ویرایش")
-    setIsOpend(true)
+    setEdit(true);
+    setEditProduct(product);
+    setTitle("ویرایش محصول");
+    setAction("ویرایش");
+    setIsOpend(true);
+  };
+  const clickDeleteHandler = (product) => {
+    setDelete(true);
+    setDeleteProduct(product)
+    setTitle("آیا از حذف این محصول مطمئن هستید؟");
   };
   return (
     <>
@@ -47,7 +59,10 @@ function ProductsList() {
                   <td className={styles.productDetail}>{product.id}</td>
                   <td className={styles.productDetail}>
                     {" "}
-                    <FiEdit onClick={()=>clickHandler(product)} /> <RiDeleteBin6Line />
+                    <FiEdit onClick={() => clickHandler(product)} />{" "}
+                    <RiDeleteBin6Line
+                      onClick={() => clickDeleteHandler(product)}
+                    />
                   </td>
                 </tr>
               ))}

@@ -61,3 +61,13 @@
   border-radius: 10px;
   cursor: pointer;
 }
+.svg {
+  background-color: #fff;
+  width: 25%;
+  border-radius: 10px;
+  text-align: center;
+}
+.svg svg{
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
